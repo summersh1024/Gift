@@ -124,7 +124,7 @@
       line-height: 1.7;
     }
 
-    .primary-button, .close-button, .final-button {
+    .primary-button, .close-button, .final-button, .settings-toggle, .save-settings {
       border: 0;
       border-radius: 999px;
       padding: 15px 28px;
@@ -138,7 +138,7 @@
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .primary-button:hover, .close-button:hover, .final-button:hover {
+    .primary-button:hover, .close-button:hover, .final-button:hover, .settings-toggle:hover, .save-settings:hover {
       transform: translateY(-3px) scale(1.03);
       box-shadow: 0 18px 30px rgba(255, 105, 142, 0.4);
     }
@@ -229,8 +229,12 @@
     }
 
     .slice.opened {
-      opacity: 0.58;
-      filter: saturate(0.88) drop-shadow(0 5px 0 rgba(143, 80, 80, 0.12));
+      fill: #d8ced1;
+      opacity: 1;
+      cursor: not-allowed;
+      pointer-events: none;
+      filter: drop-shadow(0 3px 0 rgba(99, 70, 76, 0.18));
+      stroke: rgba(255, 255, 255, 0.75);
     }
 
     .slice-label {
@@ -244,6 +248,29 @@
       pointer-events: none;
       text-anchor: middle;
       dominant-baseline: middle;
+    }
+
+    .slice-label.opened {
+      color: #8d6d73;
+      font-size: 48px;
+      stroke-width: 7px;
+    }
+
+    .opened-badge {
+      display: none;
+      fill: #8d4f5e;
+      font-size: 24px;
+      font-weight: 900;
+      paint-order: stroke fill;
+      pointer-events: none;
+      stroke: rgba(255, 255, 255, 0.9);
+      stroke-width: 5px;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+
+    .opened-badge.show {
+      display: block;
     }
 
     .wheel-center {
@@ -293,6 +320,112 @@
     .candle-stage.show {
       display: grid;
       animation: popIn 0.45s ease both;
+    }
+
+    .wheel-wrap.celebrating {
+      width: min(260px, 58vw);
+      padding: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .wheel-wrap.celebrating::before {
+      display: none;
+    }
+
+    .wheel-wrap.celebrating .wheel,
+    .wheel-wrap.celebrating .wheel-center {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.85);
+    }
+
+    .wheel-wrap.celebrating .candle-stage {
+      inset: 0;
+      background: radial-gradient(circle, rgba(255, 248, 212, 0.98), rgba(255, 220, 232, 0.78) 62%, transparent 72%);
+      box-shadow: none;
+    }
+
+    .wheel-wrap.celebrating + .final-button {
+      display: none;
+    }
+
+    .settings-toggle {
+      margin-top: 18px;
+      padding: 10px 20px;
+      font-size: 15px;
+      background: linear-gradient(135deg, #ffc0d8, #ffc58c);
+      box-shadow: 0 10px 18px rgba(255, 105, 142, 0.22);
+    }
+
+    .settings-panel {
+      display: none;
+      width: min(560px, 100%);
+      margin: 18px auto 0;
+      padding: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      border-radius: 26px;
+      text-align: left;
+      background: rgba(255, 255, 255, 0.66);
+      box-shadow: 0 14px 28px rgba(156, 83, 96, 0.16);
+    }
+
+    .settings-panel.show {
+      display: block;
+      animation: popIn 0.25s ease both;
+    }
+
+    .settings-panel h3 {
+      margin: 0 0 10px;
+      color: var(--rose);
+      font-size: 22px;
+      text-align: center;
+    }
+
+    .settings-note {
+      margin: 0 0 14px;
+      color: #8a5555;
+      font-size: 14px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .settings-row,
+    .gift-editor {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .settings-row label,
+    .gift-editor label {
+      font-weight: 800;
+      color: #79494f;
+    }
+
+    .settings-row select,
+    .gift-editor input,
+    .gift-editor textarea {
+      width: 100%;
+      border: 1px solid rgba(255, 122, 163, 0.35);
+      border-radius: 14px;
+      padding: 10px 12px;
+      color: #6f3b3b;
+      font: inherit;
+      background: rgba(255, 250, 250, 0.92);
+      outline: none;
+    }
+
+    .gift-editor textarea {
+      min-height: 70px;
+      resize: vertical;
+    }
+
+    .save-settings {
+      display: block;
+      margin: 16px auto 0;
+      padding: 10px 22px;
+      font-size: 15px;
     }
 
     .candle {
@@ -517,6 +650,14 @@
       .slice-label {
         font-size: 39px;
       }
+
+      .opened-badge {
+        font-size: 21px;
+      }
+
+      .settings-panel {
+        padding: 14px;
+      }
     }
   </style>
 </head>
@@ -542,6 +683,17 @@
         </div>
       </div>
       <button class="final-button" id="finalButton" type="button">点亮蜡烛</button>
+      <button class="settings-toggle" id="settingsToggle" type="button">礼物设置</button>
+      <section class="settings-panel" id="settingsPanel" aria-label="礼物设置">
+        <h3>礼物设置</h3>
+        <p class="settings-note">这里可以设置礼物数量和每个编号对应的内容，保存后会重新生成转盘。</p>
+        <div class="settings-row">
+          <label for="giftCount">礼物数量</label>
+          <select id="giftCount"></select>
+        </div>
+        <div id="giftEditors"></div>
+        <button class="save-settings" id="saveSettings" type="button">保存设置</button>
+      </section>
     </section>
   </main>
 
@@ -578,18 +730,25 @@
     const colors = ["#ffd1df", "#ffe1a8", "#c9f4d6", "#cbe7ff", "#ead9ff", "#ffc6c1", "#fff0a8", "#c8fff4", "#ffd9ee"];
     const svgNamespace = "http://www.w3.org/2000/svg";
     const maxGiftCount = 9;
-    const gifts = giftSettings.gifts.slice(0, Math.min(giftSettings.count, maxGiftCount));
+    let gifts = giftSettings.gifts.slice(0, Math.min(giftSettings.count, maxGiftCount));
     const openedGifts = new Set();
     const hero = document.getElementById("hero");
     const wheelScene = document.getElementById("wheelScene");
     const wheel = document.getElementById("wheel");
+    const wheelWrap = document.querySelector(".wheel-wrap");
     const modal = document.getElementById("modal");
     const giftTitle = document.getElementById("giftTitle");
     const giftDetail = document.getElementById("giftDetail");
     const finalButton = document.getElementById("finalButton");
     const candleStage = document.getElementById("candleStage");
+    const settingsToggle = document.getElementById("settingsToggle");
+    const settingsPanel = document.getElementById("settingsPanel");
+    const giftCount = document.getElementById("giftCount");
+    const giftEditors = document.getElementById("giftEditors");
+    const saveSettings = document.getElementById("saveSettings");
 
     renderWheel();
+    renderSettings();
 
     document.getElementById("acceptGift").addEventListener("click", () => {
       hero.classList.add("hide");
@@ -601,8 +760,37 @@
     });
 
     finalButton.addEventListener("click", () => {
+      wheelWrap.classList.add("celebrating");
       candleStage.classList.add("show");
       playBirthdaySong();
+    });
+
+    settingsToggle.addEventListener("click", () => {
+      settingsPanel.classList.toggle("show");
+    });
+
+    giftCount.addEventListener("change", () => {
+      renderGiftEditors(Number(giftCount.value));
+    });
+
+    saveSettings.addEventListener("click", () => {
+      const nextCount = Number(giftCount.value);
+      const nextGifts = [];
+
+      for (let index = 0; index < nextCount; index += 1) {
+        const title = document.getElementById(`giftTitleInput${index}`).value.trim() || `${index + 1}号礼物`;
+        const detail = document.getElementById(`giftDetailInput${index}`).value.trim() || "这是一份待填写的生日礼物。";
+        nextGifts.push({ title, detail });
+      }
+
+      giftSettings.count = nextCount;
+      giftSettings.gifts = nextGifts;
+      gifts = giftSettings.gifts.slice(0, Math.min(giftSettings.count, maxGiftCount));
+      openedGifts.clear();
+      finalButton.classList.remove("show");
+      candleStage.classList.remove("show");
+      wheelWrap.classList.remove("celebrating");
+      renderWheel();
     });
 
     modal.addEventListener("click", (event) => {
@@ -612,6 +800,7 @@
     });
 
     function renderWheel() {
+      wheel.innerHTML = "";
       const definitions = document.createElementNS(svgNamespace, "defs");
 
       gifts.forEach((_, index) => {
@@ -635,7 +824,9 @@
         const group = document.createElementNS(svgNamespace, "g");
         const segment = document.createElementNS(svgNamespace, "path");
         const label = document.createElementNS(svgNamespace, "text");
+        const badge = document.createElementNS(svgNamespace, "text");
         const labelPosition = polarToCartesian(260, 260, 152, middleAngle);
+        const badgePosition = polarToCartesian(260, 260, 103, middleAngle);
 
         segment.setAttribute("d", describeSlice(260, 260, 226, startAngle, endAngle));
         segment.setAttribute("fill", `url(#sliceGradient${index})`);
@@ -643,11 +834,11 @@
         segment.setAttribute("tabindex", "0");
         segment.setAttribute("role", "button");
         segment.setAttribute("aria-label", `${index + 1}号礼物`);
-        segment.addEventListener("click", () => openGift(gift, index, segment));
+        segment.addEventListener("click", () => openGift(gift, index, segment, label, badge));
         segment.addEventListener("keydown", (event) => {
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
-            openGift(gift, index, segment);
+            openGift(gift, index, segment, label, badge);
           }
         });
 
@@ -656,15 +847,28 @@
         label.setAttribute("class", "slice-label");
         label.textContent = index + 1;
 
+        badge.setAttribute("x", badgePosition.x);
+        badge.setAttribute("y", badgePosition.y);
+        badge.setAttribute("class", "opened-badge");
+        badge.textContent = "已开";
+
         group.appendChild(segment);
         group.appendChild(label);
+        group.appendChild(badge);
         wheel.appendChild(group);
       });
     }
 
-    function openGift(gift, index, segment) {
+    function openGift(gift, index, segment, label, badge) {
+      if (openedGifts.has(index)) return;
+
       openedGifts.add(index);
       segment.classList.add("opened");
+      segment.removeAttribute("tabindex");
+      segment.setAttribute("aria-disabled", "true");
+      label.classList.add("opened");
+      label.textContent = "✓";
+      badge.classList.add("show");
       giftTitle.textContent = gift.title;
       giftDetail.textContent = gift.detail;
       modal.classList.remove("show");
@@ -674,6 +878,43 @@
       if (openedGifts.size === gifts.length) {
         finalButton.classList.add("show");
       }
+    }
+
+    function renderSettings() {
+      for (let count = 1; count <= maxGiftCount; count += 1) {
+        const option = document.createElement("option");
+        option.value = count;
+        option.textContent = `${count}个礼物`;
+        giftCount.appendChild(option);
+      }
+
+      giftCount.value = gifts.length;
+      renderGiftEditors(gifts.length);
+    }
+
+    function renderGiftEditors(count) {
+      giftEditors.innerHTML = "";
+
+      for (let index = 0; index < count; index += 1) {
+        const gift = giftSettings.gifts[index] || { title: `${index + 1}号礼物`, detail: "" };
+        const editor = document.createElement("div");
+        editor.className = "gift-editor";
+        editor.innerHTML = `
+          <label for="giftTitleInput${index}">${index + 1}号礼物标题</label>
+          <input id="giftTitleInput${index}" type="text" value="${escapeAttribute(gift.title)}" />
+          <label for="giftDetailInput${index}">${index + 1}号礼物描述</label>
+          <textarea id="giftDetailInput${index}">${escapeHtml(gift.detail)}</textarea>
+        `;
+        giftEditors.appendChild(editor);
+      }
+    }
+
+    function escapeAttribute(value) {
+      return value.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function escapeHtml(value) {
+      return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
     function describeSlice(centerX, centerY, radius, startAngle, endAngle) {
