@@ -3,6 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>生日快乐</title>
   <style>
     :root {
@@ -142,7 +145,7 @@
 
     .wheel-scene {
       display: none;
-      padding-bottom: 42px;
+      padding-bottom: 46px;
       overflow: visible;
     }
 
@@ -173,13 +176,31 @@
     }
 
     .wheel-wrap {
-      width: min(520px, calc(100vw - 54px));
+      width: min(430px, calc(100vw - 92px));
       aspect-ratio: 1;
-      margin: 0 auto;
+      margin: 8px auto 0;
       position: relative;
       display: grid;
       place-items: center;
-      filter: drop-shadow(0 24px 30px rgba(126, 70, 70, 0.24));
+      border-radius: 50%;
+      background: linear-gradient(145deg, #fffdf8, #ffd8e8 48%, #eec8ff);
+      box-shadow:
+        inset 0 16px 18px rgba(255, 255, 255, 0.86),
+        inset 0 -18px 22px rgba(165, 82, 118, 0.15),
+        0 26px 0 #f2b8cb,
+        0 34px 34px rgba(126, 70, 70, 0.25);
+      padding: 14px;
+    }
+
+    .wheel-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 5px;
+      border: 8px solid #fff;
+      border-radius: 50%;
+      box-shadow: inset 0 0 24px rgba(255, 122, 163, 0.22);
+      pointer-events: none;
+      z-index: 1;
     }
 
     .wheel {
@@ -188,21 +209,23 @@
       display: block;
       border-radius: 50%;
       overflow: visible;
+      position: relative;
+      z-index: 0;
     }
 
     .slice {
       cursor: pointer;
-      stroke: rgba(255, 255, 255, 0.9);
-      stroke-width: 3;
-      filter: drop-shadow(0 8px 0 rgba(143, 80, 80, 0.18)) drop-shadow(0 13px 12px rgba(120, 60, 60, 0.16));
+      stroke: rgba(255, 255, 255, 0.96);
+      stroke-width: 5;
+      filter: drop-shadow(0 7px 0 rgba(132, 72, 95, 0.26)) drop-shadow(0 12px 9px rgba(120, 60, 60, 0.16));
       transform-box: fill-box;
       transform-origin: center;
       transition: filter 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
     }
 
     .slice:hover {
-      filter: brightness(1.06) saturate(1.08) drop-shadow(0 10px 0 rgba(143, 80, 80, 0.18)) drop-shadow(0 16px 14px rgba(120, 60, 60, 0.18));
-      transform: translateY(-2px) scale(1.01);
+      filter: brightness(1.07) saturate(1.12) drop-shadow(0 10px 0 rgba(132, 72, 95, 0.24)) drop-shadow(0 16px 13px rgba(120, 60, 60, 0.2));
+      transform: translateY(-4px) scale(1.015);
     }
 
     .slice.opened {
@@ -211,13 +234,13 @@
     }
 
     .slice-label {
-      color: #753d45;
+      color: #703246;
       fill: currentColor;
-      font-size: 34px;
+      font-size: 42px;
       font-weight: 900;
       paint-order: stroke fill;
-      stroke: rgba(255, 255, 255, 0.82);
-      stroke-width: 6px;
+      stroke: rgba(255, 255, 255, 0.9);
+      stroke-width: 8px;
       pointer-events: none;
       text-anchor: middle;
       dominant-baseline: middle;
@@ -232,13 +255,13 @@
       transform: translate(-50%, -50%);
       display: grid;
       place-items: center;
-      border: 8px solid #fff;
+      border: 7px solid #fff;
       border-radius: 50%;
       color: var(--rose);
-      font-size: clamp(18px, 4vw, 27px);
+      font-size: clamp(16px, 3.4vw, 23px);
       font-weight: 900;
       background: linear-gradient(135deg, #fff9df, #ffe3ee);
-      box-shadow: 0 10px 24px rgba(134, 70, 70, 0.18);
+      box-shadow: 0 12px 0 #f4b7c8, 0 20px 25px rgba(134, 70, 70, 0.2);
       z-index: 2;
       pointer-events: none;
     }
@@ -448,7 +471,16 @@
     @media (max-width: 560px) {
       .hero, .wheel-scene {
         border-radius: 30px;
-        padding: 24px 12px 32px;
+        padding: 24px 10px 34px;
+      }
+
+      .wheel-title {
+        margin-bottom: 14px;
+      }
+
+      .hint {
+        margin-bottom: 18px;
+        font-size: 16px;
       }
 
       .cake {
@@ -458,17 +490,32 @@
       }
 
       .wheel {
-        width: min(100%, 340px);
+        width: 100%;
         height: auto;
+      }
+
+      .wheel-wrap {
+        width: min(336px, calc(100vw - 104px));
+        padding: 10px;
+        box-shadow:
+          inset 0 13px 16px rgba(255, 255, 255, 0.86),
+          inset 0 -14px 18px rgba(165, 82, 118, 0.15),
+          0 18px 0 #f2b8cb,
+          0 26px 28px rgba(126, 70, 70, 0.23);
+      }
+
+      .wheel-wrap::before {
+        border-width: 6px;
       }
 
       .wheel-center {
         border-width: 5px;
-        font-size: 17px;
+        font-size: 15px;
+        box-shadow: 0 8px 0 #f4b7c8, 0 14px 18px rgba(134, 70, 70, 0.18);
       }
 
       .slice-label {
-        font-size: 31px;
+        font-size: 39px;
       }
     }
   </style>
@@ -588,9 +635,9 @@
         const group = document.createElementNS(svgNamespace, "g");
         const segment = document.createElementNS(svgNamespace, "path");
         const label = document.createElementNS(svgNamespace, "text");
-        const labelPosition = polarToCartesian(260, 260, 162, middleAngle);
+        const labelPosition = polarToCartesian(260, 260, 152, middleAngle);
 
-        segment.setAttribute("d", describeSlice(260, 260, 236, startAngle, endAngle));
+        segment.setAttribute("d", describeSlice(260, 260, 226, startAngle, endAngle));
         segment.setAttribute("fill", `url(#sliceGradient${index})`);
         segment.setAttribute("class", "slice");
         segment.setAttribute("tabindex", "0");
