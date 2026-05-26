@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>生日快乐</title>
+  <style>
+    :root {
+      --bg-1: #fff4f7;
+      --bg-2: #ffe8b7;
+      --pink: #ff72a5;
+      --rose: #ff4f8b;
+      --cream: #fffaf0;
+      --brown: #6f3b3b;
+      --shadow: 0 24px 70px rgba(255, 100, 151, 0.26);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      overflow-x: hidden;
+      color: var(--brown);
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.95) 0 6px, transparent 7px),
+        radial-gradient(circle at 82% 22%, rgba(255, 255, 255, 0.8) 0 10px, transparent 11px),
+        radial-gradient(circle at 78% 80%, rgba(255, 255, 255, 0.9) 0 7px, transparent 8px),
+        linear-gradient(135deg, var(--bg-1), var(--bg-2));
+    }
+
+    .confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle, #ff8fbd 0 4px, transparent 5px),
+        radial-gradient(circle, #ffd85a 0 3px, transparent 4px),
+        radial-gradient(circle, #8bdcff 0 3px, transparent 4px),
+        radial-gradient(circle, #9feb9f 0 4px, transparent 5px);
+      background-position: 5% 12%, 22% 78%, 75% 14%, 90% 74%;
+      background-size: 180px 180px, 210px 210px, 190px 190px, 230px 230px;
+      opacity: 0.5;
+      animation: drift 12s linear infinite;
+    }
+
+    @keyframes drift {
+      to { background-position: 5% 110%, 22% 176%, 75% 112%, 90% 172%; }
+    }
+
+    .page {
+      width: min(920px, calc(100vw - 28px));
+      min-height: min(720px, calc(100vh - 28px));
+      display: grid;
+      place-items: center;
+      padding: 36px 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero, .wheel-scene {
+      width: min(760px, 100%);
+      border: 4px solid rgba(255, 255, 255, 0.75);
+      border-radius: 42px;
+      padding: clamp(26px, 5vw, 56px);
+      text-align: center;
+      background: rgba(255, 250, 240, 0.78);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before, .wheel-scene::before {
+      content: "";
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      right: -42px;
+      top: -42px;
+      border-radius: 50%;
+      background: rgba(255, 114, 165, 0.16);
+    }
+
+    .cake {
+      width: 138px;
+      height: 138px;
+      margin: 0 auto 18px;
+      display: grid;
+      place-items: center;
+      border-radius: 38px;
+      background: linear-gradient(160deg, #fff, #ffe5ef);
+      box-shadow: inset 0 -8px 0 rgba(255, 114, 165, 0.16), 0 18px 34px rgba(255, 79, 139, 0.18);
+      font-size: 74px;
+      animation: bounce 2.4s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-10px) rotate(2deg); }
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(42px, 8vw, 82px);
+      line-height: 1;
+      letter-spacing: 0.06em;
+      color: var(--rose);
+      text-shadow: 0 5px 0 #fff, 0 14px 32px rgba(255, 79, 139, 0.22);
+    }
+
+    .subtitle {
+      margin: 22px auto 0;
+      max-width: 560px;
+      font-size: clamp(17px, 3.5vw, 24px);
+      line-height: 1.7;
+    }
+
+    .primary-button, .close-button {
+      border: 0;
+      border-radius: 999px;
+      padding: 15px 28px;
+      margin-top: 30px;
+      cursor: pointer;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ff6b9d, #ff9e57);
+      box-shadow: 0 14px 24px rgba(255, 105, 142, 0.32);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .primary-button:hover, .close-button:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 18px 30px rgba(255, 105, 142, 0.4);
+    }
+
+    .wheel-scene {
+      display: none;
+      padding-bottom: 42px;
+    }
+
+    .wheel-scene.show {
+      display: block;
+      animation: popIn 0.45s ease both;
+    }
+
+    .hero.hide {
+      display: none;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(18px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .wheel-title {
+      margin: 0 0 20px;
+      font-size: clamp(28px, 5vw, 48px);
+      color: var(--rose);
+    }
+
+    .hint {
+      margin: 0 auto 24px;
+      font-size: 17px;
+      color: #8a5555;
+    }
+
+    .wheel-wrap {
+      width: min(520px, 88vw);
+      aspect-ratio: 1;
+      margin: 0 auto;
+      position: relative;
+      filter: drop-shadow(0 22px 32px rgba(126, 70, 70, 0.22));
+    }
+
+    .wheel {
+      width: 100%;
+      height: 100%;
+      border: 10px solid #fff;
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .slice {
+      --angle: 0deg;
+      --color: #ffd1df;
+      position: absolute;
+      inset: 0;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+      background: conic-gradient(from var(--angle), var(--color) 0deg 40deg, transparent 40deg 360deg);
+      clip-path: circle(50% at 50% 50%);
+      transition: filter 0.2s ease, transform 0.2s ease;
+    }
+
+    .slice:hover {
+      filter: brightness(1.05) saturate(1.08);
+      transform: scale(1.018);
+    }
+
+    .slice-label {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 42%;
+      height: 42%;
+      transform: rotate(calc(var(--angle) + 20deg)) translateY(-92%) rotate(calc(-1 * (var(--angle) + 20deg)));
+      transform-origin: center;
+      display: grid;
+      place-items: center;
+      color: #753d45;
+      font-size: clamp(22px, 5vw, 34px);
+      font-weight: 900;
+      text-shadow: 0 2px 0 rgba(255, 255, 255, 0.78);
+      pointer-events: none;
+    }
+
+    .wheel-center {
+      position: absolute;
+      inset: 35%;
+      display: grid;
+      place-items: center;
+      border: 8px solid #fff;
+      border-radius: 50%;
+      color: var(--rose);
+      font-size: clamp(18px, 4vw, 27px);
+      font-weight: 900;
+      background: linear-gradient(135deg, #fff9df, #ffe3ee);
+      box-shadow: 0 10px 24px rgba(134, 70, 70, 0.18);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      place-items: center;
+      padding: 20px;
+      z-index: 5;
+      background: rgba(76, 36, 45, 0.24);
+      backdrop-filter: blur(8px);
+    }
+
+    .modal.show {
+      display: grid;
+    }
+
+    .gift-box {
+      width: min(420px, 92vw);
+      min-height: 360px;
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+
+    .box-art {
+      width: 190px;
+      height: 150px;
+      position: relative;
+      animation: shake 0.55s ease both;
+    }
+
+    .box-lid, .box-body {
+      position: absolute;
+      left: 0;
+      right: 0;
+      margin: auto;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #ff6b9d, #ff9e57);
+      box-shadow: 0 18px 28px rgba(255, 96, 132, 0.32);
+    }
+
+    .box-lid {
+      top: 0;
+      width: 210px;
+      height: 48px;
+      transform-origin: 12% 100%;
+      animation: openLid 0.75s 0.45s cubic-bezier(.2, .8, .2, 1) forwards;
+    }
+
+    .box-body {
+      bottom: 0;
+      width: 180px;
+      height: 110px;
+    }
+
+    .box-lid::before, .box-body::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 34px;
+      height: 100%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .box-lid::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -46px;
+      width: 72px;
+      height: 58px;
+      border: 12px solid rgba(255, 255, 255, 0.82);
+      border-radius: 50% 50% 44% 44%;
+      transform: translateX(-50%) rotate(-10deg);
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: rotate(0); }
+      25% { transform: rotate(-4deg); }
+      50% { transform: rotate(4deg); }
+      75% { transform: rotate(-3deg); }
+    }
+
+    @keyframes openLid {
+      to { transform: translate(-18px, -76px) rotate(-28deg); opacity: 0.92; }
+    }
+
+    .gift-card {
+      width: min(390px, 88vw);
+      padding: 28px 24px;
+      border: 4px solid #fff;
+      border-radius: 32px;
+      text-align: center;
+      background: var(--cream);
+      box-shadow: var(--shadow);
+      position: absolute;
+      opacity: 0;
+      transform: translateY(36px) scale(0.86);
+      animation: cardUp 0.65s 1s ease forwards;
+    }
+
+    @keyframes cardUp {
+      to { opacity: 1; transform: translateY(-24px) scale(1); }
+    }
+
+    .gift-card h2 {
+      margin: 0;
+      color: var(--rose);
+      font-size: 30px;
+    }
+
+    .gift-card p {
+      margin: 16px 0 0;
+      font-size: 19px;
+      line-height: 1.7;
+    }
+
+    .close-button {
+      margin-top: 22px;
+      padding: 12px 22px;
+      font-size: 16px;
+    }
+
+    @media (max-width: 560px) {
+      .hero, .wheel-scene {
+        border-radius: 30px;
+      }
+
+      .cake {
+        width: 112px;
+        height: 112px;
+        font-size: 58px;
+      }
+
+      .wheel {
+        border-width: 7px;
+      }
+
+      .wheel-center {
+        border-width: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="confetti"></div>
+
+  <main class="page">
+    <section class="hero" id="hero">
+      <div class="cake" aria-hidden="true">🎂</div>
+      <h1>祝你生日快乐</h1>
+      <p class="subtitle">今天的好运、甜甜的心情和小惊喜都打包好啦。点一下，收下你的生日礼物。</p>
+      <button class="primary-button" id="acceptGift">接受礼物</button>
+    </section>
+
+    <section class="wheel-scene" id="wheelScene" aria-label="礼物转盘">
+      <h2 class="wheel-title">生日礼物转盘</h2>
+      <p class="hint">点击任意一个扇形，打开专属于你的礼物盒。</p>
+      <div class="wheel-wrap">
+        <div class="wheel" id="wheel"></div>
+        <div class="wheel-center">选礼物</div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="giftTitle">
+    <div class="gift-box">
+      <div class="box-art" aria-hidden="true">
+        <div class="box-lid"></div>
+        <div class="box-body"></div>
+      </div>
+      <article class="gift-card">
+        <h2 id="giftTitle"></h2>
+        <p id="giftDetail"></p>
+        <button class="close-button" id="closeModal">再选一次</button>
+      </article>
+    </div>
+  </div>
+
+  <script>
+    const gifts = [
+      { icon: "🍰", title: "甜甜蛋糕券", detail: "兑换一块你最爱的蛋糕，今天所有甜味都归你。" },
+      { icon: "🌸", title: "鲜花拥抱", detail: "一束可爱的花和一个大大的拥抱，祝你每天都被温柔包围。" },
+      { icon: "🎬", title: "电影约会", detail: "任选一部想看的电影，爆米花和快乐都安排好。" },
+      { icon: "🧋", title: "奶茶自由", detail: "本周任选一杯奶茶，加料不纠结，开心最重要。" },
+      { icon: "📷", title: "拍照纪念", detail: "一起拍一组生日照片，把今天的可爱永久保存。" },
+      { icon: "🍲", title: "大餐基金", detail: "挑一家想吃很久的店，这顿生日大餐我来安排。" },
+      { icon: "🧸", title: "可爱陪伴", detail: "一只软乎乎的小伙伴，替我陪你度过每个放松时刻。" },
+      { icon: "🎧", title: "专属歌单", detail: "送你一份只属于你的快乐歌单，循环播放好心情。" },
+      { icon: "✨", title: "神秘愿望", detail: "写下一个小愿望，我会认真帮你实现一个可执行版本。" }
+    ];
+
+    const colors = ["#ffd1df", "#ffe1a8", "#c9f4d6", "#cbe7ff", "#ead9ff", "#ffc6c1", "#fff0a8", "#c8fff4", "#ffd9ee"];
+    const hero = document.getElementById("hero");
+    const wheelScene = document.getElementById("wheelScene");
+    const wheel = document.getElementById("wheel");
+    const modal = document.getElementById("modal");
+    const giftTitle = document.getElementById("giftTitle");
+    const giftDetail = document.getElementById("giftDetail");
+
+    gifts.forEach((gift, index) => {
+      const angle = index * 40;
+      const button = document.createElement("button");
+      button.className = "slice";
+      button.type = "button";
+      button.style.setProperty("--angle", `${angle}deg`);
+      button.style.setProperty("--color", colors[index]);
+      button.setAttribute("aria-label", gift.title);
+      button.innerHTML = `<span class="slice-label" style="--angle:${angle}deg">${gift.icon}</span>`;
+      button.addEventListener("click", () => openGift(gift));
+      wheel.appendChild(button);
+    });
+
+    document.getElementById("acceptGift").addEventListener("click", () => {
+      hero.classList.add("hide");
+      wheelScene.classList.add("show");
+    });
+
+    document.getElementById("closeModal").addEventListener("click", () => {
+      modal.classList.remove("show");
+    });
+
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) {
+        modal.classList.remove("show");
+      }
+    });
+
+    function openGift(gift) {
+      giftTitle.textContent = gift.title;
+      giftDetail.textContent = gift.detail;
+      modal.classList.remove("show");
+      void modal.offsetWidth;
+      modal.classList.add("show");
+    }
+  </script>
+</body>
+</html>
