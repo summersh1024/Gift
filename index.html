@@ -121,7 +121,7 @@
       line-height: 1.7;
     }
 
-    .primary-button, .close-button {
+    .primary-button, .close-button, .final-button {
       border: 0;
       border-radius: 999px;
       padding: 15px 28px;
@@ -135,7 +135,7 @@
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .primary-button:hover, .close-button:hover {
+    .primary-button:hover, .close-button:hover, .final-button:hover {
       transform: translateY(-3px) scale(1.03);
       box-shadow: 0 18px 30px rgba(255, 105, 142, 0.4);
     }
@@ -143,6 +143,7 @@
     .wheel-scene {
       display: none;
       padding-bottom: 42px;
+      overflow: visible;
     }
 
     .wheel-scene.show {
@@ -172,61 +173,63 @@
     }
 
     .wheel-wrap {
-      width: min(520px, 88vw);
+      width: min(520px, calc(100vw - 54px));
       aspect-ratio: 1;
       margin: 0 auto;
       position: relative;
-      filter: drop-shadow(0 22px 32px rgba(126, 70, 70, 0.22));
+      display: grid;
+      place-items: center;
+      filter: drop-shadow(0 24px 30px rgba(126, 70, 70, 0.24));
     }
 
     .wheel {
       width: 100%;
       height: 100%;
-      border: 10px solid #fff;
+      display: block;
       border-radius: 50%;
-      position: relative;
-      overflow: hidden;
-      background: #fff;
+      overflow: visible;
     }
 
     .slice {
-      --angle: 0deg;
-      --color: #ffd1df;
-      position: absolute;
-      inset: 0;
-      border: 0;
-      padding: 0;
       cursor: pointer;
-      background: conic-gradient(from var(--angle), var(--color) 0deg 40deg, transparent 40deg 360deg);
-      clip-path: circle(50% at 50% 50%);
-      transition: filter 0.2s ease, transform 0.2s ease;
+      stroke: rgba(255, 255, 255, 0.9);
+      stroke-width: 3;
+      filter: drop-shadow(0 8px 0 rgba(143, 80, 80, 0.18)) drop-shadow(0 13px 12px rgba(120, 60, 60, 0.16));
+      transform-box: fill-box;
+      transform-origin: center;
+      transition: filter 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
     }
 
     .slice:hover {
-      filter: brightness(1.05) saturate(1.08);
-      transform: scale(1.018);
+      filter: brightness(1.06) saturate(1.08) drop-shadow(0 10px 0 rgba(143, 80, 80, 0.18)) drop-shadow(0 16px 14px rgba(120, 60, 60, 0.18));
+      transform: translateY(-2px) scale(1.01);
+    }
+
+    .slice.opened {
+      opacity: 0.58;
+      filter: saturate(0.88) drop-shadow(0 5px 0 rgba(143, 80, 80, 0.12));
     }
 
     .slice-label {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 42%;
-      height: 42%;
-      transform: rotate(calc(var(--angle) + 20deg)) translateY(-92%) rotate(calc(-1 * (var(--angle) + 20deg)));
-      transform-origin: center;
-      display: grid;
-      place-items: center;
       color: #753d45;
-      font-size: clamp(22px, 5vw, 34px);
+      fill: currentColor;
+      font-size: 34px;
       font-weight: 900;
-      text-shadow: 0 2px 0 rgba(255, 255, 255, 0.78);
+      paint-order: stroke fill;
+      stroke: rgba(255, 255, 255, 0.82);
+      stroke-width: 6px;
       pointer-events: none;
+      text-anchor: middle;
+      dominant-baseline: middle;
     }
 
     .wheel-center {
       position: absolute;
-      inset: 35%;
+      left: 50%;
+      top: 50%;
+      width: 28%;
+      aspect-ratio: 1;
+      transform: translate(-50%, -50%);
       display: grid;
       place-items: center;
       border: 8px solid #fff;
@@ -238,6 +241,75 @@
       box-shadow: 0 10px 24px rgba(134, 70, 70, 0.18);
       z-index: 2;
       pointer-events: none;
+    }
+
+    .final-button {
+      display: none;
+      margin-top: 24px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .final-button.show {
+      display: inline-block;
+      animation: popIn 0.35s ease both;
+    }
+
+    .candle-stage {
+      position: absolute;
+      inset: 21%;
+      display: none;
+      place-items: center;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 250, 224, 0.96), rgba(255, 219, 230, 0.82));
+      box-shadow: 0 16px 34px rgba(255, 102, 141, 0.24);
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .candle-stage.show {
+      display: grid;
+      animation: popIn 0.45s ease both;
+    }
+
+    .candle {
+      width: 34px;
+      height: 118px;
+      border-radius: 15px 15px 8px 8px;
+      position: relative;
+      background: repeating-linear-gradient(-35deg, #fff 0 15px, #ff9fbd 15px 29px);
+      box-shadow: inset -6px 0 0 rgba(189, 69, 105, 0.12), 0 14px 24px rgba(115, 50, 62, 0.2);
+    }
+
+    .candle::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -48px;
+      width: 30px;
+      height: 44px;
+      border-radius: 50% 50% 48% 48%;
+      transform: translateX(-50%);
+      background: radial-gradient(circle at 50% 62%, #fff8a6 0 20%, #ffb02e 42%, #ff6a3d 74%);
+      box-shadow: 0 0 26px rgba(255, 174, 55, 0.82);
+      animation: flame 0.9s ease-in-out infinite alternate;
+    }
+
+    .candle::after {
+      content: "许愿";
+      position: absolute;
+      left: 50%;
+      bottom: -44px;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      color: var(--rose);
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    @keyframes flame {
+      from { transform: translateX(-50%) scale(0.95) rotate(-3deg); }
+      to { transform: translateX(-50%) scale(1.08) rotate(3deg); }
     }
 
     .modal {
@@ -255,6 +327,18 @@
       display: grid;
     }
 
+    .modal.show .box-art {
+      animation: shake 0.55s ease both;
+    }
+
+    .modal.show .box-lid {
+      animation: openLid 0.75s 0.45s cubic-bezier(.2, .8, .2, 1) forwards;
+    }
+
+    .modal.show .gift-card {
+      animation: cardUp 0.65s 1s ease forwards;
+    }
+
     .gift-box {
       width: min(420px, 92vw);
       min-height: 360px;
@@ -267,7 +351,6 @@
       width: 190px;
       height: 150px;
       position: relative;
-      animation: shake 0.55s ease both;
     }
 
     .box-lid, .box-body {
@@ -285,7 +368,6 @@
       width: 210px;
       height: 48px;
       transform-origin: 12% 100%;
-      animation: openLid 0.75s 0.45s cubic-bezier(.2, .8, .2, 1) forwards;
     }
 
     .box-body {
@@ -339,7 +421,6 @@
       position: absolute;
       opacity: 0;
       transform: translateY(36px) scale(0.86);
-      animation: cardUp 0.65s 1s ease forwards;
     }
 
     @keyframes cardUp {
@@ -367,6 +448,7 @@
     @media (max-width: 560px) {
       .hero, .wheel-scene {
         border-radius: 30px;
+        padding: 24px 12px 32px;
       }
 
       .cake {
@@ -376,11 +458,17 @@
       }
 
       .wheel {
-        border-width: 7px;
+        width: min(100%, 340px);
+        height: auto;
       }
 
       .wheel-center {
         border-width: 5px;
+        font-size: 17px;
+      }
+
+      .slice-label {
+        font-size: 31px;
       }
     }
   </style>
@@ -400,9 +488,13 @@
       <h2 class="wheel-title">生日礼物转盘</h2>
       <p class="hint">打开专属于你的礼物盒。</p>
       <div class="wheel-wrap">
-        <div class="wheel" id="wheel"></div>
+        <svg class="wheel" id="wheel" viewBox="0 0 520 520" role="img" aria-label="礼物编号转盘"></svg>
         <div class="wheel-center">选礼物</div>
+        <div class="candle-stage" id="candleStage" aria-hidden="true">
+          <div class="candle"></div>
+        </div>
       </div>
+      <button class="final-button" id="finalButton" type="button">点亮蜡烛</button>
     </section>
   </main>
 
@@ -421,38 +513,36 @@
   </div>
 
   <script>
-    const gifts = [
-      { icon: "🍰", title: "甜甜蛋糕券", detail: "兑换一块你最爱的蛋糕，今天所有甜味都归你。" },
-      { icon: "🌸", title: "鲜花拥抱", detail: "一束可爱的花和一个大大的拥抱，祝你每天都被温柔包围。" },
-      { icon: "🎬", title: "电影约会", detail: "任选一部想看的电影，爆米花和快乐都安排好。" },
-      { icon: "🧋", title: "奶茶自由", detail: "本周任选一杯奶茶，加料不纠结，开心最重要。" },
-      { icon: "📷", title: "拍照纪念", detail: "一起拍一组生日照片，把今天的可爱永久保存。" },
-      { icon: "🍲", title: "大餐基金", detail: "挑一家想吃很久的店，这顿生日大餐我来安排。" },
-      { icon: "🧸", title: "可爱陪伴", detail: "一只软乎乎的小伙伴，替我陪你度过每个放松时刻。" },
-      { icon: "🎧", title: "专属歌单", detail: "送你一份只属于你的快乐歌单，循环播放好心情。" },
-      { icon: "✨", title: "神秘愿望", detail: "写下一个小愿望，我会认真帮你实现一个可执行版本。" }
-    ];
+    const giftSettings = {
+      count: 9,
+      gifts: [
+        { title: "1号礼物", detail: "兑换一块你最爱的蛋糕，今天所有甜味都归你。" },
+        { title: "2号礼物", detail: "一束可爱的花和一个大大的拥抱，祝你每天都被温柔包围。" },
+        { title: "3号礼物", detail: "任选一部想看的电影，爆米花和快乐都安排好。" },
+        { title: "4号礼物", detail: "本周任选一杯奶茶，加料不纠结，开心最重要。" },
+        { title: "5号礼物", detail: "一起拍一组生日照片，把今天的可爱永久保存。" },
+        { title: "6号礼物", detail: "挑一家想吃很久的店，这顿生日大餐我来安排。" },
+        { title: "7号礼物", detail: "一只软乎乎的小伙伴，替我陪你度过每个放松时刻。" },
+        { title: "8号礼物", detail: "送你一份只属于你的快乐歌单，循环播放好心情。" },
+        { title: "9号礼物", detail: "写下一个小愿望，我会认真帮你实现一个可执行版本。" }
+      ]
+    };
 
     const colors = ["#ffd1df", "#ffe1a8", "#c9f4d6", "#cbe7ff", "#ead9ff", "#ffc6c1", "#fff0a8", "#c8fff4", "#ffd9ee"];
+    const svgNamespace = "http://www.w3.org/2000/svg";
+    const maxGiftCount = 9;
+    const gifts = giftSettings.gifts.slice(0, Math.min(giftSettings.count, maxGiftCount));
+    const openedGifts = new Set();
     const hero = document.getElementById("hero");
     const wheelScene = document.getElementById("wheelScene");
     const wheel = document.getElementById("wheel");
     const modal = document.getElementById("modal");
     const giftTitle = document.getElementById("giftTitle");
     const giftDetail = document.getElementById("giftDetail");
+    const finalButton = document.getElementById("finalButton");
+    const candleStage = document.getElementById("candleStage");
 
-    gifts.forEach((gift, index) => {
-      const angle = index * 40;
-      const button = document.createElement("button");
-      button.className = "slice";
-      button.type = "button";
-      button.style.setProperty("--angle", `${angle}deg`);
-      button.style.setProperty("--color", colors[index]);
-      button.setAttribute("aria-label", gift.title);
-      button.innerHTML = `<span class="slice-label" style="--angle:${angle}deg">${gift.icon}</span>`;
-      button.addEventListener("click", () => openGift(gift));
-      wheel.appendChild(button);
-    });
+    renderWheel();
 
     document.getElementById("acceptGift").addEventListener("click", () => {
       hero.classList.add("hide");
@@ -463,18 +553,142 @@
       modal.classList.remove("show");
     });
 
+    finalButton.addEventListener("click", () => {
+      candleStage.classList.add("show");
+      playBirthdaySong();
+    });
+
     modal.addEventListener("click", (event) => {
       if (event.target === modal) {
         modal.classList.remove("show");
       }
     });
 
-    function openGift(gift) {
+    function renderWheel() {
+      const definitions = document.createElementNS(svgNamespace, "defs");
+
+      gifts.forEach((_, index) => {
+        const gradient = document.createElementNS(svgNamespace, "linearGradient");
+        gradient.setAttribute("id", `sliceGradient${index}`);
+        gradient.setAttribute("x1", "20%");
+        gradient.setAttribute("y1", "0%");
+        gradient.setAttribute("x2", "82%");
+        gradient.setAttribute("y2", "100%");
+        gradient.innerHTML = `<stop offset="0%" stop-color="#fff7fb"/><stop offset="42%" stop-color="${colors[index]}"/><stop offset="100%" stop-color="${shadeColor(colors[index], -16)}"/>`;
+        definitions.appendChild(gradient);
+      });
+
+      wheel.appendChild(definitions);
+
+      const angleSize = 360 / gifts.length;
+      gifts.forEach((gift, index) => {
+        const startAngle = -90 + index * angleSize;
+        const endAngle = startAngle + angleSize;
+        const middleAngle = startAngle + angleSize / 2;
+        const group = document.createElementNS(svgNamespace, "g");
+        const segment = document.createElementNS(svgNamespace, "path");
+        const label = document.createElementNS(svgNamespace, "text");
+        const labelPosition = polarToCartesian(260, 260, 162, middleAngle);
+
+        segment.setAttribute("d", describeSlice(260, 260, 236, startAngle, endAngle));
+        segment.setAttribute("fill", `url(#sliceGradient${index})`);
+        segment.setAttribute("class", "slice");
+        segment.setAttribute("tabindex", "0");
+        segment.setAttribute("role", "button");
+        segment.setAttribute("aria-label", `${index + 1}号礼物`);
+        segment.addEventListener("click", () => openGift(gift, index, segment));
+        segment.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openGift(gift, index, segment);
+          }
+        });
+
+        label.setAttribute("x", labelPosition.x);
+        label.setAttribute("y", labelPosition.y);
+        label.setAttribute("class", "slice-label");
+        label.textContent = index + 1;
+
+        group.appendChild(segment);
+        group.appendChild(label);
+        wheel.appendChild(group);
+      });
+    }
+
+    function openGift(gift, index, segment) {
+      openedGifts.add(index);
+      segment.classList.add("opened");
       giftTitle.textContent = gift.title;
       giftDetail.textContent = gift.detail;
       modal.classList.remove("show");
       void modal.offsetWidth;
       modal.classList.add("show");
+
+      if (openedGifts.size === gifts.length) {
+        finalButton.classList.add("show");
+      }
+    }
+
+    function describeSlice(centerX, centerY, radius, startAngle, endAngle) {
+      const start = polarToCartesian(centerX, centerY, radius, endAngle);
+      const end = polarToCartesian(centerX, centerY, radius, startAngle);
+      const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+
+      return [
+        "M", centerX, centerY,
+        "L", start.x, start.y,
+        "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y,
+        "Z"
+      ].join(" ");
+    }
+
+    function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
+      const angleInRadians = angleInDegrees * Math.PI / 180;
+
+      return {
+        x: centerX + radius * Math.cos(angleInRadians),
+        y: centerY + radius * Math.sin(angleInRadians)
+      };
+    }
+
+    function shadeColor(color, percent) {
+      const value = parseInt(color.slice(1), 16);
+      const amount = Math.round(2.55 * percent);
+      const red = Math.max(0, Math.min(255, (value >> 16) + amount));
+      const green = Math.max(0, Math.min(255, (value >> 8 & 0x00ff) + amount));
+      const blue = Math.max(0, Math.min(255, (value & 0x0000ff) + amount));
+
+      return `#${(0x1000000 + red * 0x10000 + green * 0x100 + blue).toString(16).slice(1)}`;
+    }
+
+    function playBirthdaySong() {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+
+      const context = new AudioContext();
+      const notes = [
+        [392, 0.35], [392, 0.2], [440, 0.55], [392, 0.55], [523.25, 0.55], [493.88, 0.9],
+        [392, 0.35], [392, 0.2], [440, 0.55], [392, 0.55], [587.33, 0.55], [523.25, 0.9],
+        [392, 0.35], [392, 0.2], [783.99, 0.55], [659.25, 0.55], [523.25, 0.55], [493.88, 0.55], [440, 0.9],
+        [698.46, 0.35], [698.46, 0.2], [659.25, 0.55], [523.25, 0.55], [587.33, 0.55], [523.25, 1.1]
+      ];
+      let startTime = context.currentTime + 0.08;
+
+      notes.forEach(([frequency, duration]) => {
+        const oscillator = context.createOscillator();
+        const gain = context.createGain();
+
+        oscillator.type = "triangle";
+        oscillator.frequency.value = frequency;
+        gain.gain.setValueAtTime(0.0001, startTime);
+        gain.gain.exponentialRampToValueAtTime(0.22, startTime + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration - 0.03);
+        oscillator.connect(gain);
+        gain.connect(context.destination);
+        oscillator.start(startTime);
+        oscillator.stop(startTime + duration);
+        startTime += duration + 0.04;
+      });
     }
   </script>
 </body>
