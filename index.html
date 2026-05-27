@@ -9,464 +9,330 @@
   <title>生日快乐</title>
   <style>
     :root {
-      --bg-1: #fff4f7;
-      --bg-2: #ffe8b7;
-      --pink: #ff72a5;
-      --rose: #ff4f8b;
-      --cream: #fffaf0;
-      --brown: #6f3b3b;
-      --shadow: 0 24px 70px rgba(255, 100, 151, 0.26);
+      --cream: #fff8e8;
+      --cream-deep: #ffe7bd;
+      --pink: #ff8bad;
+      --rose: #ee4f7c;
+      --cherry: #c92e55;
+      --brown: #684039;
+      --mint: #bcefd9;
+      --lavender: #dccbff;
+      --shadow: 0 24px 60px rgba(160, 74, 89, 0.22);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       min-height: 100vh;
       margin: 0;
-      display: grid;
-      place-items: center;
-      overflow-x: hidden;
       color: var(--brown);
       font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
       background:
-        radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.95) 0 6px, transparent 7px),
-        radial-gradient(circle at 82% 22%, rgba(255, 255, 255, 0.8) 0 10px, transparent 11px),
-        radial-gradient(circle at 78% 80%, rgba(255, 255, 255, 0.9) 0 7px, transparent 8px),
-        linear-gradient(135deg, var(--bg-1), var(--bg-2));
+        radial-gradient(circle at 12% 16%, rgba(255, 139, 173, 0.28) 0 7px, transparent 8px),
+        radial-gradient(circle at 82% 14%, rgba(255, 213, 88, 0.35) 0 7px, transparent 8px),
+        radial-gradient(circle at 16% 84%, rgba(133, 211, 255, 0.28) 0 6px, transparent 7px),
+        radial-gradient(circle at 84% 78%, rgba(255, 139, 173, 0.2) 0 9px, transparent 10px),
+        linear-gradient(145deg, #fff3f6 0%, var(--cream) 52%, var(--cream-deep) 100%);
+      overflow-x: hidden;
     }
 
-    .confetti {
+    .sparkles {
       position: fixed;
       inset: 0;
       pointer-events: none;
+      opacity: 0.55;
       background-image:
-        radial-gradient(circle, #ff8fbd 0 4px, transparent 5px),
-        radial-gradient(circle, #ffd85a 0 3px, transparent 4px),
-        radial-gradient(circle, #8bdcff 0 3px, transparent 4px),
-        radial-gradient(circle, #9feb9f 0 4px, transparent 5px);
-      background-position: 5% 12%, 22% 78%, 75% 14%, 90% 74%;
-      background-size: 180px 180px, 210px 210px, 190px 190px, 230px 230px;
-      opacity: 0.5;
-      animation: drift 12s linear infinite;
+        radial-gradient(circle, #ff8bad 0 3px, transparent 4px),
+        radial-gradient(circle, #ffd86b 0 3px, transparent 4px),
+        radial-gradient(circle, #95dcff 0 3px, transparent 4px),
+        radial-gradient(circle, #aceccf 0 3px, transparent 4px);
+      background-size: 160px 180px, 220px 190px, 180px 210px, 240px 220px;
+      animation: drift 13s linear infinite;
     }
 
     @keyframes drift {
-      to { background-position: 5% 110%, 22% 176%, 75% 112%, 90% 172%; }
+      to { background-position: 0 180px, 0 190px, 0 210px, 0 220px; }
     }
 
     .page {
-      width: min(920px, calc(100vw - 28px));
-      min-height: min(720px, calc(100vh - 28px));
+      width: min(900px, 100%);
+      min-height: 100vh;
+      margin: 0 auto;
       display: grid;
       place-items: center;
-      padding: 36px 18px;
+      padding: 28px 16px;
       position: relative;
       z-index: 1;
     }
 
-    .hero, .wheel-scene {
-      width: min(760px, 100%);
-      border: 4px solid rgba(255, 255, 255, 0.75);
+    .screen { display: none; width: 100%; }
+    .screen.show { display: block; animation: rise 0.45s ease both; }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(16px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .card {
+      width: min(720px, 100%);
+      margin: 0 auto;
+      padding: clamp(26px, 7vw, 60px) clamp(20px, 6vw, 54px);
+      border: 3px solid rgba(255, 255, 255, 0.85);
       border-radius: 42px;
-      padding: clamp(26px, 5vw, 56px);
       text-align: center;
-      background: rgba(255, 250, 240, 0.78);
-      box-shadow: var(--shadow);
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.82), rgba(255, 247, 225, 0.78));
+      box-shadow: var(--shadow), inset 0 0 0 10px rgba(255, 255, 255, 0.28);
       backdrop-filter: blur(10px);
       position: relative;
       overflow: hidden;
     }
 
-    .hero::before, .wheel-scene::before {
+    .card::before {
       content: "";
       position: absolute;
-      width: 160px;
-      height: 160px;
-      right: -42px;
-      top: -42px;
+      width: 210px;
+      height: 210px;
+      right: -76px;
+      top: -74px;
       border-radius: 50%;
-      background: rgba(255, 114, 165, 0.16);
+      background: rgba(255, 139, 173, 0.17);
     }
 
-    .cake {
-      width: 138px;
-      height: 138px;
-      margin: 0 auto 18px;
-      display: grid;
-      place-items: center;
-      border-radius: 38px;
-      background: linear-gradient(160deg, #fff, #ffe5ef);
-      box-shadow: inset 0 -8px 0 rgba(255, 114, 165, 0.16), 0 18px 34px rgba(255, 79, 139, 0.18);
-      font-size: 74px;
-      animation: bounce 2.4s ease-in-out infinite;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0) rotate(-2deg); }
-      50% { transform: translateY(-10px) rotate(2deg); }
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(42px, 8vw, 82px);
-      line-height: 1;
-      letter-spacing: 0.06em;
-      color: var(--rose);
-      text-shadow: 0 5px 0 #fff, 0 14px 32px rgba(255, 79, 139, 0.22);
-    }
-
-    .subtitle {
-      margin: 22px auto 0;
-      max-width: 560px;
-      font-size: clamp(17px, 3.5vw, 24px);
-      line-height: 1.7;
-    }
-
-    .primary-button, .close-button, .final-button, .settings-toggle, .save-settings {
-      border: 0;
-      border-radius: 999px;
-      padding: 15px 28px;
-      margin-top: 30px;
-      cursor: pointer;
-      color: #fff;
-      font-size: 18px;
-      font-weight: 800;
-      background: linear-gradient(135deg, #ff6b9d, #ff9e57);
-      box-shadow: 0 14px 24px rgba(255, 105, 142, 0.32);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .primary-button:hover, .close-button:hover, .final-button:hover, .settings-toggle:hover, .save-settings:hover {
-      transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 18px 30px rgba(255, 105, 142, 0.4);
-    }
-
-    .wheel-scene {
-      display: none;
-      padding-bottom: 46px;
-      overflow: visible;
-    }
-
-    .wheel-scene.show {
-      display: block;
-      animation: popIn 0.45s ease both;
-    }
-
-    .hero.hide {
-      display: none;
-    }
-
-    @keyframes popIn {
-      from { opacity: 0; transform: translateY(18px) scale(0.96); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    .wheel-title {
-      margin: 0 0 20px;
-      font-size: clamp(28px, 5vw, 48px);
-      color: var(--rose);
-    }
-
-    .hint {
-      margin: 0 auto 24px;
-      font-size: 17px;
-      color: #8a5555;
-    }
-
-    .wheel-wrap {
-      width: min(430px, calc(100vw - 92px));
-      aspect-ratio: 1;
-      margin: 8px auto 0;
+    .cake-mark {
+      width: 150px;
+      height: 122px;
+      margin: 0 auto 22px;
       position: relative;
-      display: grid;
-      place-items: center;
-      border-radius: 50%;
-      background: linear-gradient(145deg, #fffdf8, #ffd8e8 48%, #eec8ff);
-      box-shadow:
-        inset 0 16px 18px rgba(255, 255, 255, 0.86),
-        inset 0 -18px 22px rgba(165, 82, 118, 0.15),
-        0 26px 0 #f2b8cb,
-        0 34px 34px rgba(126, 70, 70, 0.25);
-      padding: 14px;
+      filter: drop-shadow(0 16px 22px rgba(201, 46, 85, 0.22));
     }
 
-    .wheel-wrap::before {
-      content: "";
-      position: absolute;
-      inset: 5px;
-      border: 8px solid #fff;
-      border-radius: 50%;
-      box-shadow: inset 0 0 24px rgba(255, 122, 163, 0.22);
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .wheel {
-      width: 100%;
-      height: 100%;
-      display: block;
-      border-radius: 50%;
-      overflow: visible;
-      position: relative;
-      z-index: 0;
-    }
-
-    .slice {
-      cursor: pointer;
-      stroke: rgba(255, 255, 255, 0.96);
-      stroke-width: 5;
-      filter: drop-shadow(0 7px 0 rgba(132, 72, 95, 0.26)) drop-shadow(0 12px 9px rgba(120, 60, 60, 0.16));
-      transform-box: fill-box;
-      transform-origin: center;
-      transition: filter 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
-    }
-
-    .slice:hover {
-      filter: brightness(1.07) saturate(1.12) drop-shadow(0 10px 0 rgba(132, 72, 95, 0.24)) drop-shadow(0 16px 13px rgba(120, 60, 60, 0.2));
-      transform: translateY(-4px) scale(1.015);
-    }
-
-    .slice.opened {
-      fill: #d8ced1;
-      opacity: 1;
-      cursor: not-allowed;
-      pointer-events: none;
-      filter: drop-shadow(0 3px 0 rgba(99, 70, 76, 0.18));
-      stroke: rgba(255, 255, 255, 0.75);
-    }
-
-    .slice-label {
-      color: #703246;
-      fill: currentColor;
-      font-size: 42px;
-      font-weight: 900;
-      paint-order: stroke fill;
-      stroke: rgba(255, 255, 255, 0.9);
-      stroke-width: 8px;
-      pointer-events: none;
-      text-anchor: middle;
-      dominant-baseline: middle;
-    }
-
-    .slice-label.opened {
-      color: #8d6d73;
-      font-size: 48px;
-      stroke-width: 7px;
-    }
-
-    .opened-badge {
-      display: none;
-      fill: #8d4f5e;
-      font-size: 24px;
-      font-weight: 900;
-      paint-order: stroke fill;
-      pointer-events: none;
-      stroke: rgba(255, 255, 255, 0.9);
-      stroke-width: 5px;
-      text-anchor: middle;
-      dominant-baseline: middle;
-    }
-
-    .opened-badge.show {
-      display: block;
-    }
-
-    .wheel-center {
+    .cake-top, .cake-bottom {
       position: absolute;
       left: 50%;
-      top: 50%;
-      width: 28%;
-      aspect-ratio: 1;
-      transform: translate(-50%, -50%);
-      display: grid;
-      place-items: center;
-      border: 7px solid #fff;
-      border-radius: 50%;
-      color: var(--rose);
-      font-size: clamp(16px, 3.4vw, 23px);
-      font-weight: 900;
-      background: linear-gradient(135deg, #fff9df, #ffe3ee);
-      box-shadow: 0 12px 0 #f4b7c8, 0 20px 25px rgba(134, 70, 70, 0.2);
+      transform: translateX(-50%);
+      border-radius: 22px;
+    }
+
+    .cake-top {
+      top: 26px;
+      width: 112px;
+      height: 42px;
+      background: linear-gradient(180deg, #fff, #ffd7e4);
+      box-shadow: inset 0 -10px 0 rgba(255, 139, 173, 0.3);
+    }
+
+    .cake-bottom {
+      bottom: 0;
+      width: 150px;
+      height: 70px;
+      background: linear-gradient(180deg, #ffd06f, #ff946f);
+      box-shadow: inset 0 -12px 0 rgba(191, 65, 78, 0.16);
+    }
+
+    .cake-mark::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -6px;
+      width: 19px;
+      height: 32px;
+      transform: translateX(-50%);
+      border-radius: 10px;
+      background: repeating-linear-gradient(-35deg, #fff 0 8px, #ff8bad 8px 16px);
       z-index: 2;
-      pointer-events: none;
     }
 
-    .final-button {
-      display: none;
-      margin-top: 24px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .final-button.show {
-      display: inline-block;
-      animation: popIn 0.35s ease both;
-    }
-
-    .candle-stage {
-      position: absolute;
-      inset: 21%;
-      display: none;
-      place-items: center;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 250, 224, 0.96), rgba(255, 219, 230, 0.82));
-      box-shadow: 0 16px 34px rgba(255, 102, 141, 0.24);
-      z-index: 3;
-      pointer-events: none;
-    }
-
-    .candle-stage.show {
-      display: grid;
-      animation: popIn 0.45s ease both;
-    }
-
-    .wheel-wrap.celebrating {
-      width: min(260px, 58vw);
-      padding: 0;
-      background: transparent;
-      box-shadow: none;
-    }
-
-    .wheel-wrap.celebrating::before {
-      display: none;
-    }
-
-    .wheel-wrap.celebrating .wheel,
-    .wheel-wrap.celebrating .wheel-center {
-      opacity: 0;
-      pointer-events: none;
-      transform: scale(0.85);
-    }
-
-    .wheel-wrap.celebrating .candle-stage {
-      inset: 0;
-      background: radial-gradient(circle, rgba(255, 248, 212, 0.98), rgba(255, 220, 232, 0.78) 62%, transparent 72%);
-      box-shadow: none;
-    }
-
-    .wheel-wrap.celebrating + .final-button {
-      display: none;
-    }
-
-    .settings-toggle {
-      margin-top: 18px;
-      padding: 10px 20px;
-      font-size: 15px;
-      background: linear-gradient(135deg, #ffc0d8, #ffc58c);
-      box-shadow: 0 10px 18px rgba(255, 105, 142, 0.22);
-    }
-
-    .settings-panel {
-      display: none;
-      width: min(560px, 100%);
-      margin: 18px auto 0;
-      padding: 18px;
-      border: 2px solid rgba(255, 255, 255, 0.8);
-      border-radius: 26px;
-      text-align: left;
-      background: rgba(255, 255, 255, 0.66);
-      box-shadow: 0 14px 28px rgba(156, 83, 96, 0.16);
-    }
-
-    .settings-panel.show {
-      display: block;
-      animation: popIn 0.25s ease both;
-    }
-
-    .settings-panel h3 {
-      margin: 0 0 10px;
-      color: var(--rose);
-      font-size: 22px;
-      text-align: center;
-    }
-
-    .settings-note {
-      margin: 0 0 14px;
-      color: #8a5555;
-      font-size: 14px;
-      line-height: 1.6;
-      text-align: center;
-    }
-
-    .settings-row,
-    .gift-editor {
-      display: grid;
-      gap: 8px;
-      margin-top: 12px;
-    }
-
-    .settings-row label,
-    .gift-editor label {
-      font-weight: 800;
-      color: #79494f;
-    }
-
-    .settings-row select,
-    .gift-editor input,
-    .gift-editor textarea {
-      width: 100%;
-      border: 1px solid rgba(255, 122, 163, 0.35);
-      border-radius: 14px;
-      padding: 10px 12px;
-      color: #6f3b3b;
-      font: inherit;
-      background: rgba(255, 250, 250, 0.92);
-      outline: none;
-    }
-
-    .gift-editor textarea {
-      min-height: 70px;
-      resize: vertical;
-    }
-
-    .save-settings {
-      display: block;
-      margin: 16px auto 0;
-      padding: 10px 22px;
-      font-size: 15px;
-    }
-
-    .candle {
-      width: 34px;
-      height: 118px;
-      border-radius: 15px 15px 8px 8px;
-      position: relative;
-      background: repeating-linear-gradient(-35deg, #fff 0 15px, #ff9fbd 15px 29px);
-      box-shadow: inset -6px 0 0 rgba(189, 69, 105, 0.12), 0 14px 24px rgba(115, 50, 62, 0.2);
-    }
-
-    .candle::before {
+    .cake-mark::after {
       content: "";
       position: absolute;
       left: 50%;
-      top: -48px;
-      width: 30px;
-      height: 44px;
-      border-radius: 50% 50% 48% 48%;
+      top: -30px;
+      width: 24px;
+      height: 32px;
       transform: translateX(-50%);
-      background: radial-gradient(circle at 50% 62%, #fff8a6 0 20%, #ffb02e 42%, #ff6a3d 74%);
-      box-shadow: 0 0 26px rgba(255, 174, 55, 0.82);
+      border-radius: 50% 50% 46% 46%;
+      background: radial-gradient(circle at 50% 62%, #fff9a3 0 20%, #ffbc35 45%, #ff6e45 78%);
+      box-shadow: 0 0 22px rgba(255, 176, 46, 0.82);
       animation: flame 0.9s ease-in-out infinite alternate;
-    }
-
-    .candle::after {
-      content: "许愿";
-      position: absolute;
-      left: 50%;
-      bottom: -44px;
-      transform: translateX(-50%);
-      white-space: nowrap;
-      color: var(--rose);
-      font-size: 22px;
-      font-weight: 900;
+      z-index: 3;
     }
 
     @keyframes flame {
-      from { transform: translateX(-50%) scale(0.95) rotate(-3deg); }
+      from { transform: translateX(-50%) scale(0.94) rotate(-3deg); }
       to { transform: translateX(-50%) scale(1.08) rotate(3deg); }
     }
+
+    h1, h2 {
+      margin: 0;
+      color: var(--cherry);
+      letter-spacing: 0.06em;
+      line-height: 1.15;
+    }
+
+    h1 { font-size: clamp(44px, 9vw, 78px); }
+    h2 { font-size: clamp(30px, 7vw, 54px); }
+
+    .subtitle, .hint {
+      margin: 18px auto 0;
+      max-width: 560px;
+      color: #76514d;
+      font-size: clamp(17px, 4vw, 23px);
+      line-height: 1.7;
+    }
+
+    .button {
+      border: 0;
+      border-radius: 999px;
+      padding: 15px 30px;
+      margin-top: 28px;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      background: linear-gradient(135deg, #ee4f7c, #ff9b5f);
+      box-shadow: 0 16px 28px rgba(238, 79, 124, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .button:hover { transform: translateY(-3px); box-shadow: 0 20px 32px rgba(238, 79, 124, 0.38); }
+    .button.secondary { margin-top: 16px; padding: 11px 22px; font-size: 15px; background: linear-gradient(135deg, #ffb1ca, #ffc17d); }
+
+    .gift-card {
+      width: min(760px, 100%);
+      margin: 0 auto;
+      padding: clamp(22px, 5vw, 42px) clamp(16px, 4vw, 36px);
+      border: 3px solid rgba(255, 255, 255, 0.82);
+      border-radius: 40px;
+      text-align: center;
+      background: rgba(255, 251, 239, 0.78);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .gift-grid {
+      width: min(590px, 100%);
+      margin: 28px auto 0;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(12px, 3vw, 20px);
+    }
+
+    .gift-box {
+      min-height: 128px;
+      border: 0;
+      border-radius: 28px;
+      cursor: pointer;
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.72), rgba(255, 228, 209, 0.78));
+      box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.62), 0 16px 22px rgba(146, 76, 76, 0.16);
+      position: relative;
+      display: grid;
+      place-items: center;
+      padding: 10px;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .gift-box:hover { transform: translateY(-5px) rotate(-1deg); filter: saturate(1.05); }
+
+    .gift-box.opened {
+      cursor: not-allowed;
+      background: linear-gradient(160deg, #e2d8d5, #cfc3c2);
+      box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.5), 0 8px 14px rgba(96, 74, 76, 0.14);
+      transform: none;
+    }
+
+    .box-shape {
+      width: 74px;
+      height: 66px;
+      position: relative;
+      filter: drop-shadow(0 10px 10px rgba(154, 74, 84, 0.18));
+    }
+
+    .box-shape::before, .box-shape::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--pink), #ff9c64);
+    }
+
+    .box-shape::before { top: 0; width: 84px; height: 23px; }
+    .box-shape::after { bottom: 0; width: 68px; height: 45px; }
+
+    .ribbon {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 15px;
+      height: 66px;
+      transform: translateX(-50%);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.78);
+      z-index: 2;
+    }
+
+    .gift-number {
+      position: absolute;
+      right: 14px;
+      top: 12px;
+      color: var(--cherry);
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .opened-text {
+      display: none;
+      color: #795f62;
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1.35;
+    }
+
+    .gift-box.opened .box-shape { display: none; }
+    .gift-box.opened .opened-text { display: block; }
+
+    .progress {
+      margin-top: 22px;
+      color: #7d5551;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .final-button { display: none; }
+    .final-button.show { display: inline-block; animation: rise 0.35s ease both; }
+
+    .settings-panel {
+      display: none;
+      width: min(580px, 100%);
+      margin: 18px auto 0;
+      padding: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.82);
+      border-radius: 26px;
+      text-align: left;
+      background: rgba(255, 255, 255, 0.72);
+      box-shadow: 0 14px 28px rgba(156, 83, 96, 0.16);
+    }
+
+    .settings-panel.show { display: block; }
+    .settings-panel h3 { margin: 0 0 8px; color: var(--cherry); text-align: center; }
+    .settings-note { margin: 0 0 14px; color: #805955; font-size: 14px; line-height: 1.6; text-align: center; }
+
+    .settings-row, .gift-editor { display: grid; gap: 8px; margin-top: 12px; }
+    .settings-row label, .gift-editor label { font-weight: 900; color: #734c49; }
+
+    select, input, textarea {
+      width: 100%;
+      border: 1px solid rgba(238, 79, 124, 0.32);
+      border-radius: 14px;
+      padding: 10px 12px;
+      color: var(--brown);
+      font: inherit;
+      background: rgba(255, 251, 248, 0.95);
+      outline: none;
+    }
+
+    textarea { min-height: 68px; resize: vertical; }
 
     .modal {
       position: fixed;
@@ -475,85 +341,39 @@
       place-items: center;
       padding: 20px;
       z-index: 5;
-      background: rgba(76, 36, 45, 0.24);
-      backdrop-filter: blur(8px);
+      background: rgba(72, 38, 45, 0.28);
+      backdrop-filter: blur(9px);
     }
 
-    .modal.show {
-      display: grid;
-    }
+    .modal.show { display: grid; }
 
-    .modal.show .box-art {
-      animation: shake 0.55s ease both;
-    }
-
-    .modal.show .box-lid {
-      animation: openLid 0.75s 0.45s cubic-bezier(.2, .8, .2, 1) forwards;
-    }
-
-    .modal.show .gift-card {
-      animation: cardUp 0.65s 1s ease forwards;
-    }
-
-    .gift-box {
+    .gift-reveal {
       width: min(420px, 92vw);
-      min-height: 360px;
+      min-height: 390px;
       display: grid;
       place-items: center;
       position: relative;
     }
 
-    .box-art {
-      width: 190px;
+    .reveal-box {
+      width: 180px;
       height: 150px;
       position: relative;
+      animation: shake 0.55s ease both;
     }
 
-    .box-lid, .box-body {
-      position: absolute;
-      left: 0;
-      right: 0;
-      margin: auto;
-      border-radius: 18px;
-      background: linear-gradient(135deg, #ff6b9d, #ff9e57);
-      box-shadow: 0 18px 28px rgba(255, 96, 132, 0.32);
-    }
-
-    .box-lid {
-      top: 0;
-      width: 210px;
-      height: 48px;
-      transform-origin: 12% 100%;
-    }
-
-    .box-body {
-      bottom: 0;
-      width: 180px;
-      height: 110px;
-    }
-
-    .box-lid::before, .box-body::before {
-      content: "";
+    .reveal-lid, .reveal-body {
       position: absolute;
       left: 50%;
-      top: 0;
-      width: 34px;
-      height: 100%;
       transform: translateX(-50%);
-      background: rgba(255, 255, 255, 0.72);
+      border-radius: 18px;
+      background: linear-gradient(135deg, #ee4f7c, #ff9b5f);
+      box-shadow: 0 18px 28px rgba(238, 79, 124, 0.32);
     }
 
-    .box-lid::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      top: -46px;
-      width: 72px;
-      height: 58px;
-      border: 12px solid rgba(255, 255, 255, 0.82);
-      border-radius: 50% 50% 44% 44%;
-      transform: translateX(-50%) rotate(-10deg);
-    }
+    .reveal-lid { top: 0; width: 210px; height: 48px; transform-origin: 12% 100%; animation: openLid 0.75s 0.42s cubic-bezier(.2,.8,.2,1) forwards; }
+    .reveal-body { bottom: 0; width: 176px; height: 112px; }
+    .reveal-lid::before, .reveal-body::before { content: ""; position: absolute; left: 50%; top: 0; width: 32px; height: 100%; transform: translateX(-50%); background: rgba(255,255,255,0.76); }
 
     @keyframes shake {
       0%, 100% { transform: rotate(0); }
@@ -562,151 +382,100 @@
       75% { transform: rotate(-3deg); }
     }
 
-    @keyframes openLid {
-      to { transform: translate(-18px, -76px) rotate(-28deg); opacity: 0.92; }
-    }
+    @keyframes openLid { to { transform: translate(-72px, -78px) rotate(-30deg); } }
 
-    .gift-card {
+    .message-card {
+      position: absolute;
       width: min(390px, 88vw);
       padding: 28px 24px;
       border: 4px solid #fff;
-      border-radius: 32px;
+      border-radius: 30px;
+      background: linear-gradient(160deg, #fffaf0, #fff1f6);
       text-align: center;
-      background: var(--cream);
       box-shadow: var(--shadow);
-      position: absolute;
       opacity: 0;
-      transform: translateY(36px) scale(0.86);
+      transform: translateY(40px) scale(0.86);
+      animation: cardUp 0.65s 1s ease forwards;
     }
 
-    @keyframes cardUp {
-      to { opacity: 1; transform: translateY(-24px) scale(1); }
-    }
+    @keyframes cardUp { to { opacity: 1; transform: translateY(-24px) scale(1); } }
 
-    .gift-card h2 {
-      margin: 0;
-      color: var(--rose);
-      font-size: 30px;
-    }
+    .message-card h3 { margin: 0; color: var(--cherry); font-size: 30px; }
+    .message-card p { margin: 15px 0 0; font-size: 18px; line-height: 1.7; }
 
-    .gift-card p {
-      margin: 16px 0 0;
-      font-size: 19px;
-      line-height: 1.7;
-    }
-
-    .close-button {
-      margin-top: 22px;
-      padding: 12px 22px;
-      font-size: 16px;
-    }
+    .wish-screen .card { min-height: 560px; display: grid; place-items: center; }
+    .wish-cake { transform: scale(1.28); margin-bottom: 38px; }
+    .wish-title { margin-top: 18px; }
 
     @media (max-width: 560px) {
-      .hero, .wheel-scene {
-        border-radius: 30px;
-        padding: 24px 10px 34px;
-      }
-
-      .wheel-title {
-        margin-bottom: 14px;
-      }
-
-      .hint {
-        margin-bottom: 18px;
-        font-size: 16px;
-      }
-
-      .cake {
-        width: 112px;
-        height: 112px;
-        font-size: 58px;
-      }
-
-      .wheel {
-        width: 100%;
-        height: auto;
-      }
-
-      .wheel-wrap {
-        width: min(336px, calc(100vw - 104px));
-        padding: 10px;
-        box-shadow:
-          inset 0 13px 16px rgba(255, 255, 255, 0.86),
-          inset 0 -14px 18px rgba(165, 82, 118, 0.15),
-          0 18px 0 #f2b8cb,
-          0 26px 28px rgba(126, 70, 70, 0.23);
-      }
-
-      .wheel-wrap::before {
-        border-width: 6px;
-      }
-
-      .wheel-center {
-        border-width: 5px;
-        font-size: 15px;
-        box-shadow: 0 8px 0 #f4b7c8, 0 14px 18px rgba(134, 70, 70, 0.18);
-      }
-
-      .slice-label {
-        font-size: 39px;
-      }
-
-      .opened-badge {
-        font-size: 21px;
-      }
-
-      .settings-panel {
-        padding: 14px;
-      }
+      .page { padding: 18px 12px; }
+      .card, .gift-card { border-radius: 32px; }
+      .gift-grid { gap: 11px; }
+      .gift-box { min-height: 110px; border-radius: 22px; }
+      .box-shape { width: 62px; height: 58px; }
+      .box-shape::before { width: 72px; height: 20px; }
+      .box-shape::after { width: 58px; height: 39px; }
+      .ribbon { height: 58px; }
+      .gift-number { right: 11px; top: 9px; font-size: 19px; }
+      .opened-text { font-size: 16px; }
+      .button { font-size: 16px; padding: 13px 24px; }
     }
   </style>
 </head>
 <body>
-  <div class="confetti"></div>
+  <div class="sparkles"></div>
 
   <main class="page">
-    <section class="hero" id="hero">
-      <div class="cake" aria-hidden="true">🎂</div>
-      <h1>祝你生日快乐</h1>
-      <p class="subtitle">亲爱的小午，22岁生日快乐！！！</p>
-      <button class="primary-button" id="acceptGift">接受礼物</button>
+    <section class="screen show" id="introScreen">
+      <article class="card">
+        <div class="cake-mark" aria-hidden="true"><div class="cake-top"></div><div class="cake-bottom"></div></div>
+        <h1>生日快乐</h1>
+        <p class="subtitle">亲爱的小午，22岁生日快乐。今天的每一份惊喜，都想慢慢拆给你看。</p>
+        <button class="button" id="startButton" type="button">开始拆礼物</button>
+      </article>
     </section>
 
-    <section class="wheel-scene" id="wheelScene" aria-label="礼物转盘">
-      <h2 class="wheel-title">生日礼物转盘</h2>
-      <p class="hint">打开专属于你的礼物盒。</p>
-      <div class="wheel-wrap">
-        <svg class="wheel" id="wheel" viewBox="0 0 520 520" role="img" aria-label="礼物编号转盘"></svg>
-        <div class="wheel-center">选礼物</div>
-        <div class="candle-stage" id="candleStage" aria-hidden="true">
-          <div class="candle"></div>
+    <section class="screen" id="giftScreen">
+      <article class="gift-card">
+        <h2 id="giftHeading">拆礼物时间</h2>
+        <p class="hint">每个盒子只能打开一次，全部拆完后就可以点亮生日蜡烛。</p>
+        <div class="gift-grid" id="giftGrid" aria-label="礼物盒列表"></div>
+        <div class="progress" id="progressText"></div>
+        <button class="button final-button" id="finalButton" type="button">点亮生日蜡烛</button>
+        <section class="settings-panel" id="settingsPanel" aria-label="礼物设置">
+          <h3>礼物设置</h3>
+          <p class="settings-note">长按“拆礼物时间”可打开这里。修改后点击保存，会重新生成礼物盒。</p>
+          <div class="settings-row">
+            <label for="giftCount">礼物数量</label>
+            <select id="giftCount"></select>
+          </div>
+          <div id="giftEditors"></div>
+          <button class="button secondary" id="saveSettings" type="button">保存设置</button>
+        </section>
+      </article>
+    </section>
+
+    <section class="screen wish-screen" id="wishScreen">
+      <article class="card">
+        <div>
+          <div class="cake-mark wish-cake" aria-hidden="true"><div class="cake-top"></div><div class="cake-bottom"></div></div>
+          <h2 class="wish-title">生日愿望已点亮</h2>
+          <p class="subtitle">愿你新的一岁，被喜欢的事填满，被温柔的人包围。</p>
         </div>
-      </div>
-      <button class="final-button" id="finalButton" type="button">点亮蜡烛</button>
-      <button class="settings-toggle" id="settingsToggle" type="button">礼物设置</button>
-      <section class="settings-panel" id="settingsPanel" aria-label="礼物设置">
-        <h3>礼物设置</h3>
-        <p class="settings-note">这里可以设置礼物数量和每个编号对应的内容，保存后会重新生成转盘。</p>
-        <div class="settings-row">
-          <label for="giftCount">礼物数量</label>
-          <select id="giftCount"></select>
-        </div>
-        <div id="giftEditors"></div>
-        <button class="save-settings" id="saveSettings" type="button">保存设置</button>
-      </section>
+      </article>
     </section>
   </main>
 
   <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="giftTitle">
-    <div class="gift-box">
-      <div class="box-art" aria-hidden="true">
-        <div class="box-lid"></div>
-        <div class="box-body"></div>
+    <div class="gift-reveal">
+      <div class="reveal-box" aria-hidden="true">
+        <div class="reveal-lid"></div>
+        <div class="reveal-body"></div>
       </div>
-      <article class="gift-card">
-        <h2 id="giftTitle"></h2>
+      <article class="message-card">
+        <h3 id="giftTitle"></h3>
         <p id="giftDetail"></p>
-        <button class="close-button" id="closeModal">再选一次</button>
+        <button class="button secondary" id="closeModal" type="button">收下礼物</button>
       </article>
     </div>
   </div>
@@ -727,53 +496,46 @@
       ]
     };
 
-    const colors = ["#ffd1df", "#ffe1a8", "#c9f4d6", "#cbe7ff", "#ead9ff", "#ffc6c1", "#fff0a8", "#c8fff4", "#ffd9ee"];
-    const svgNamespace = "http://www.w3.org/2000/svg";
     const maxGiftCount = 9;
     let gifts = giftSettings.gifts.slice(0, Math.min(giftSettings.count, maxGiftCount));
-    const openedGifts = new Set();
-    const hero = document.getElementById("hero");
-    const wheelScene = document.getElementById("wheelScene");
-    const wheel = document.getElementById("wheel");
-    const wheelWrap = document.querySelector(".wheel-wrap");
+    const opened = new Set();
+
+    const introScreen = document.getElementById("introScreen");
+    const giftScreen = document.getElementById("giftScreen");
+    const wishScreen = document.getElementById("wishScreen");
+    const giftGrid = document.getElementById("giftGrid");
+    const progressText = document.getElementById("progressText");
+    const finalButton = document.getElementById("finalButton");
     const modal = document.getElementById("modal");
     const giftTitle = document.getElementById("giftTitle");
     const giftDetail = document.getElementById("giftDetail");
-    const finalButton = document.getElementById("finalButton");
-    const candleStage = document.getElementById("candleStage");
-    const settingsToggle = document.getElementById("settingsToggle");
+    const giftHeading = document.getElementById("giftHeading");
     const settingsPanel = document.getElementById("settingsPanel");
     const giftCount = document.getElementById("giftCount");
     const giftEditors = document.getElementById("giftEditors");
-    const saveSettings = document.getElementById("saveSettings");
 
-    renderWheel();
+    renderGifts();
     renderSettings();
 
-    document.getElementById("acceptGift").addEventListener("click", () => {
-      hero.classList.add("hide");
-      wheelScene.classList.add("show");
-    });
-
-    document.getElementById("closeModal").addEventListener("click", () => {
-      modal.classList.remove("show");
-    });
+    document.getElementById("startButton").addEventListener("click", () => showScreen(giftScreen));
+    document.getElementById("closeModal").addEventListener("click", () => modal.classList.remove("show"));
+    modal.addEventListener("click", (event) => { if (event.target === modal) modal.classList.remove("show"); });
 
     finalButton.addEventListener("click", () => {
-      wheelWrap.classList.add("celebrating");
-      candleStage.classList.add("show");
+      showScreen(wishScreen);
       playBirthdaySong();
     });
 
-    settingsToggle.addEventListener("click", () => {
-      settingsPanel.classList.toggle("show");
+    let pressTimer;
+    giftHeading.addEventListener("pointerdown", () => {
+      pressTimer = window.setTimeout(() => settingsPanel.classList.toggle("show"), 700);
     });
+    giftHeading.addEventListener("pointerup", () => window.clearTimeout(pressTimer));
+    giftHeading.addEventListener("pointerleave", () => window.clearTimeout(pressTimer));
 
-    giftCount.addEventListener("change", () => {
-      renderGiftEditors(Number(giftCount.value));
-    });
+    giftCount.addEventListener("change", () => renderGiftEditors(Number(giftCount.value)));
 
-    saveSettings.addEventListener("click", () => {
+    document.getElementById("saveSettings").addEventListener("click", () => {
       const nextCount = Number(giftCount.value);
       const nextGifts = [];
 
@@ -786,98 +548,53 @@
       giftSettings.count = nextCount;
       giftSettings.gifts = nextGifts;
       gifts = giftSettings.gifts.slice(0, Math.min(giftSettings.count, maxGiftCount));
-      openedGifts.clear();
-      finalButton.classList.remove("show");
-      candleStage.classList.remove("show");
-      wheelWrap.classList.remove("celebrating");
-      renderWheel();
+      opened.clear();
+      settingsPanel.classList.remove("show");
+      renderGifts();
     });
 
-    modal.addEventListener("click", (event) => {
-      if (event.target === modal) {
-        modal.classList.remove("show");
-      }
-    });
-
-    function renderWheel() {
-      wheel.innerHTML = "";
-      const definitions = document.createElementNS(svgNamespace, "defs");
-
-      gifts.forEach((_, index) => {
-        const gradient = document.createElementNS(svgNamespace, "linearGradient");
-        gradient.setAttribute("id", `sliceGradient${index}`);
-        gradient.setAttribute("x1", "20%");
-        gradient.setAttribute("y1", "0%");
-        gradient.setAttribute("x2", "82%");
-        gradient.setAttribute("y2", "100%");
-        gradient.innerHTML = `<stop offset="0%" stop-color="#fff7fb"/><stop offset="42%" stop-color="${colors[index]}"/><stop offset="100%" stop-color="${shadeColor(colors[index], -16)}"/>`;
-        definitions.appendChild(gradient);
-      });
-
-      wheel.appendChild(definitions);
-
-      const angleSize = 360 / gifts.length;
-      gifts.forEach((gift, index) => {
-        const startAngle = -90 + index * angleSize;
-        const endAngle = startAngle + angleSize;
-        const middleAngle = startAngle + angleSize / 2;
-        const group = document.createElementNS(svgNamespace, "g");
-        const segment = document.createElementNS(svgNamespace, "path");
-        const label = document.createElementNS(svgNamespace, "text");
-        const badge = document.createElementNS(svgNamespace, "text");
-        const labelPosition = polarToCartesian(260, 260, 152, middleAngle);
-        const badgePosition = polarToCartesian(260, 260, 103, middleAngle);
-
-        segment.setAttribute("d", describeSlice(260, 260, 226, startAngle, endAngle));
-        segment.setAttribute("fill", `url(#sliceGradient${index})`);
-        segment.setAttribute("class", "slice");
-        segment.setAttribute("tabindex", "0");
-        segment.setAttribute("role", "button");
-        segment.setAttribute("aria-label", `${index + 1}号礼物`);
-        segment.addEventListener("click", () => openGift(gift, index, segment, label, badge));
-        segment.addEventListener("keydown", (event) => {
-          if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            openGift(gift, index, segment, label, badge);
-          }
-        });
-
-        label.setAttribute("x", labelPosition.x);
-        label.setAttribute("y", labelPosition.y);
-        label.setAttribute("class", "slice-label");
-        label.textContent = index + 1;
-
-        badge.setAttribute("x", badgePosition.x);
-        badge.setAttribute("y", badgePosition.y);
-        badge.setAttribute("class", "opened-badge");
-        badge.textContent = "已开";
-
-        group.appendChild(segment);
-        group.appendChild(label);
-        group.appendChild(badge);
-        wheel.appendChild(group);
-      });
+    function showScreen(screen) {
+      [introScreen, giftScreen, wishScreen].forEach((item) => item.classList.remove("show"));
+      screen.classList.add("show");
     }
 
-    function openGift(gift, index, segment, label, badge) {
-      if (openedGifts.has(index)) return;
+    function renderGifts() {
+      giftGrid.innerHTML = "";
 
-      openedGifts.add(index);
-      segment.classList.add("opened");
-      segment.removeAttribute("tabindex");
-      segment.setAttribute("aria-disabled", "true");
-      label.classList.add("opened");
-      label.textContent = "✓";
-      badge.classList.add("show");
+      gifts.forEach((gift, index) => {
+        const button = document.createElement("button");
+        button.className = "gift-box";
+        button.type = "button";
+        button.setAttribute("aria-label", `${index + 1}号礼物`);
+        button.innerHTML = `
+          <span class="gift-number">${index + 1}</span>
+          <span class="box-shape"><span class="ribbon"></span></span>
+          <span class="opened-text">✓<br>已打开</span>
+        `;
+        button.addEventListener("click", () => openGift(index, gift, button));
+        giftGrid.appendChild(button);
+      });
+
+      updateProgress();
+    }
+
+    function openGift(index, gift, button) {
+      if (opened.has(index)) return;
+
+      opened.add(index);
+      button.classList.add("opened");
+      button.disabled = true;
       giftTitle.textContent = gift.title;
       giftDetail.textContent = gift.detail;
       modal.classList.remove("show");
       void modal.offsetWidth;
       modal.classList.add("show");
+      updateProgress();
+    }
 
-      if (openedGifts.size === gifts.length) {
-        finalButton.classList.add("show");
-      }
+    function updateProgress() {
+      progressText.textContent = `已打开 ${opened.size} / ${gifts.length} 个礼物`;
+      finalButton.classList.toggle("show", opened.size === gifts.length);
     }
 
     function renderSettings() {
@@ -917,38 +634,6 @@
       return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
-    function describeSlice(centerX, centerY, radius, startAngle, endAngle) {
-      const start = polarToCartesian(centerX, centerY, radius, endAngle);
-      const end = polarToCartesian(centerX, centerY, radius, startAngle);
-      const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
-
-      return [
-        "M", centerX, centerY,
-        "L", start.x, start.y,
-        "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y,
-        "Z"
-      ].join(" ");
-    }
-
-    function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
-      const angleInRadians = angleInDegrees * Math.PI / 180;
-
-      return {
-        x: centerX + radius * Math.cos(angleInRadians),
-        y: centerY + radius * Math.sin(angleInRadians)
-      };
-    }
-
-    function shadeColor(color, percent) {
-      const value = parseInt(color.slice(1), 16);
-      const amount = Math.round(2.55 * percent);
-      const red = Math.max(0, Math.min(255, (value >> 16) + amount));
-      const green = Math.max(0, Math.min(255, (value >> 8 & 0x00ff) + amount));
-      const blue = Math.max(0, Math.min(255, (value & 0x0000ff) + amount));
-
-      return `#${(0x1000000 + red * 0x10000 + green * 0x100 + blue).toString(16).slice(1)}`;
-    }
-
     function playBirthdaySong() {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       if (!AudioContext) return;
@@ -965,11 +650,10 @@
       notes.forEach(([frequency, duration]) => {
         const oscillator = context.createOscillator();
         const gain = context.createGain();
-
         oscillator.type = "triangle";
         oscillator.frequency.value = frequency;
         gain.gain.setValueAtTime(0.0001, startTime);
-        gain.gain.exponentialRampToValueAtTime(0.22, startTime + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.2, startTime + 0.03);
         gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration - 0.03);
         oscillator.connect(gain);
         gain.connect(context.destination);
